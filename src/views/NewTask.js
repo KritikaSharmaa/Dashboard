@@ -23,6 +23,7 @@ const NewTask = () => {
     SubDate: "",
     Status: "",
     Role: "",
+    ShortId: "",
   });
 
   const HandleTicketInput = (e) => {
@@ -35,7 +36,8 @@ const NewTask = () => {
   };
   const SaveNewTicket = (e) => {
     e.preventDefault();
-    fireDb.collection("Dashboard").doc(uid()).set(NewTicket);
+    NewTicket.ShortId = uid();
+    fireDb.collection("Dashboard").doc(NewTicket.ShortId).set(NewTicket);
     setTimeout(() => {
       window.location.reload();
     }, 500);

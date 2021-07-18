@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useState } from "react";
+import fireDB from "../firebase.js";
 
 import Navbar from "../components/Navbar";
 import Sidebar from "../components/Sidebar";
@@ -6,6 +7,62 @@ import LineChart from "../components/LineChart.js";
 import BarChart from "../components/BarChart.js";
 
 export default function Dashboard() {
+  const [TotalTask, SetTotalTask] = useState(0);
+  const [Completed, SetCompleted] = useState(0);
+  const [Pending, SetPending] = useState(0);
+  const [Late, SetLate] = useState(0);
+  //let queryS2 = [];
+  // new Promise((resolve) => {
+  //   fireDB
+  //     .collection("Dashboard")
+  //     .where("Status", "==", "Late")
+  //     .onSnapshot((querySelector) => {
+  //       querySelector.forEach((doc) => {
+  //         queryS.push(doc.data());
+  //       });
+  //       resolve(queryS.length);
+  //     });
+  // }).then((wdata) => {
+  //   console.log(wdata);
+  // });
+  // console.log(queryS.length + "**");
+  fireDB.collection("Dashboard").onSnapshot((querySelector) => {
+    let queryS = [];
+    querySelector.forEach((doc) => {
+      queryS.push(doc.data());
+    });
+    SetTotalTask(queryS.length);
+  });
+  fireDB
+    .collection("Dashboard")
+    .where("Status", "==", "Completed")
+    .onSnapshot((querySelector) => {
+      let queryS = [];
+      querySelector.forEach((doc) => {
+        queryS.push(doc.data());
+      });
+      SetCompleted(queryS.length);
+    });
+  fireDB
+    .collection("Dashboard")
+    .where("Status", "==", "On going")
+    .onSnapshot((querySelector) => {
+      let queryS = [];
+      querySelector.forEach((doc) => {
+        queryS.push(doc.data());
+      });
+      SetPending(queryS.length);
+    });
+  fireDB
+    .collection("Dashboard")
+    .where("Status", "==", "Late")
+    .onSnapshot((querySelector) => {
+      let queryS = [];
+      querySelector.forEach((doc) => {
+        queryS.push(doc.data());
+      });
+      SetLate(queryS.length);
+    });
   return (
     <>
       <Sidebar />
@@ -26,7 +83,7 @@ export default function Dashboard() {
                             Total Tasks
                           </h5>
                           <span className="font-semibold text-xl text-blueGray-700">
-                            350
+                            {TotalTask}
                           </span>
                         </div>
                         <div className="relative w-auto pl-4 flex-initial">
@@ -55,7 +112,7 @@ export default function Dashboard() {
                             Completed tasks
                           </h5>
                           <span className="font-semibold text-xl text-blueGray-700">
-                            150
+                            {Completed}
                           </span>
                         </div>
                         <div className="relative w-auto pl-4 flex-initial">
@@ -84,7 +141,7 @@ export default function Dashboard() {
                             Pending tasks
                           </h5>
                           <span className="font-semibold text-xl text-blueGray-700">
-                            24
+                            {Pending}
                           </span>
                         </div>
                         <div className="relative w-auto pl-4 flex-initial">
@@ -115,7 +172,7 @@ export default function Dashboard() {
                             Late tasks
                           </h5>
                           <span className="font-semibold text-xl text-blueGray-700">
-                            23
+                            {Late}
                           </span>
                         </div>
                         <div className="relative w-auto pl-4 flex-initial">

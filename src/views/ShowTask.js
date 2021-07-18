@@ -7,14 +7,20 @@ const ShowTask = () => {
   const uid = new ShortUniqueId();
 
   function ExtractFireStoreData() {
-    fireDB
-      .collection("Dashboard")
-      .get()
-      .then((querySnapshot) => {
-        const snapshots = querySnapshot.docs.map((doc) => doc.data());
-        SetRetrive(snapshots);
+    // fireDB   //-->page need to be refreshed again and again for update on table
+    //   .collection("Dashboard")
+    //   .get()
+    //   .then((querySnapshot) => {
+    //     const snapshots = querySnapshot.docs.map((doc) => doc.data());
+    //     SetRetrive(snapshots);
+    //   });
+    fireDB.collection("Dashboard").onSnapshot((querySelector) => {
+      const items = [];
+      querySelector.forEach((doc) => {
+        items.push(doc.data());
       });
-    // console.log(Retrive);
+      SetRetrive(items);
+    });
   }
 
   useEffect(() => {
@@ -78,7 +84,7 @@ const ShowTask = () => {
                           </thead>
                           <tbody className="bg-white divide-y divide-gray-200">
                             {Retrive.map((person) => (
-                              <tr key={uid()}>
+                              <tr key={person.ShortId}>
                                 <td className="px-6 py-4 whitespace-nowrap">
                                   <div className="flex items-center">
                                     <div className="ml-4">
@@ -118,11 +124,16 @@ const ShowTask = () => {
                                 </td>
                                 <td className="-ml-10 px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                                   <span className=" text-indigo-600 hover:text-indigo-900 cursor-pointer">
-                                    <EditTask />
+                                    <EditTask person={person} />
                                   </span>
                                   <span
-                                    className=" text-black hover:bg-yellow-500 hover:text-white font-bold uppercase text-sm px-2 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 "
-                                    onClick={() => {}}
+                                    className="cursor-pointer text-black hover:bg-yellow-500 hover:text-white font-bold uppercase text-sm px-2 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 "
+                                    onClick={(e) => {
+                                      fireDB
+                                        .collection("Dashboard")
+                                        .doc(person.ShortId)
+                                        .delete();
+                                    }}
                                   >
                                     Delete
                                   </span>

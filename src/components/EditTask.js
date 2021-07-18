@@ -1,14 +1,40 @@
-import React from "react";
+import React, { useState } from "react";
+import fireDB from "../firebase";
 
-export default function EditTask() {
+export default function EditTask({ person }) {
   const [showModal, setShowModal] = React.useState(false);
+  const [UpTicket, SetUpTicket] = useState({
+    // FirstName: "",
+    // LastName: "",
+    // Title: "",
+    // Email: "",
+    // StartDate: "",
+    // SubDate: "",
+    // Status: "",
+    // Role: "",
+    // ShortId: "",
+    ...person,
+  });
+  const HandleUpTicketInput = (e) => {
+    SetUpTicket((prevState) => {
+      return {
+        ...prevState,
+        [e.target.name]: e.target.value,
+      };
+    });
+  };
+  const HandleUpdate = () => {
+    fireDB.collection("Dashboard").doc(person.ShortId).set(UpTicket);
+    //close modal
+    setShowModal(false);
+  };
   return (
     <>
       <button
         className=" text-black hover:bg-yellow-500 hover:text-white font-bold uppercase text-sm px-2 py-2 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
         type="button"
         onClick={(e) => {
-          // console.log(e.currentTarget.parentNode.getAttribute("key"));
+          //console.log(e.currentTarget.parentNode.getAttribute("key"));
           setShowModal(true);
         }}
       >
@@ -36,7 +62,7 @@ export default function EditTask() {
                 <div className="mt-10 mb-10 ml-5 ">
                   <div className="md:grid">
                     <div className="mt-5 md:mt-0 md:col-span-2">
-                      <form>
+                      <form onSubmit={HandleUpdate}>
                         <div className="shadow-lg overflow-hidden sm:rounded-md md:mr-5">
                           <div className="px-4 py-5 bg-white sm:p-6 h-4/5 overflow-y-auto ">
                             <div className="grid grid-cols-6 gap-6">
@@ -49,9 +75,9 @@ export default function EditTask() {
                                 </label>
                                 <input
                                   type="text"
+                                  value={UpTicket.FirstName}
                                   name="FirstName"
-                                  id="first-name"
-                                  autoComplete="given-name"
+                                  onChange={HandleUpTicketInput}
                                   className="mt-1 block w-full h-10 shadow-lg focus:outline-none border-l-4 border-yellow-600 sm:text-sm "
                                 />
                               </div>
@@ -65,9 +91,9 @@ export default function EditTask() {
                                 </label>
                                 <input
                                   type="text"
+                                  value={UpTicket.LastName}
                                   name="LastName"
-                                  id="last-name"
-                                  autoComplete="family-name"
+                                  onChange={HandleUpTicketInput}
                                   className="mt-1 block w-full h-10 shadow-lg focus:outline-none border-l-4 border-yellow-600 sm:text-sm "
                                 />
                               </div>
@@ -80,9 +106,9 @@ export default function EditTask() {
                                 </label>
                                 <input
                                   type="text"
+                                  value={UpTicket.Title}
                                   name="Title"
-                                  id="title"
-                                  autoComplete="family-name"
+                                  onChange={HandleUpTicketInput}
                                   className="mt-1 block w-full h-10 shadow-lg focus:outline-none border-l-4 border-yellow-600 sm:text-sm "
                                 />
                               </div>
@@ -96,9 +122,9 @@ export default function EditTask() {
                                 </label>
                                 <input
                                   type="text"
+                                  value={UpTicket.Email}
                                   name="Email"
-                                  id="email-address"
-                                  autoComplete="email"
+                                  onChange={HandleUpTicketInput}
                                   className="mt-1 block w-full h-10 shadow-lg focus:outline-none border-l-4 border-yellow-600 sm:text-sm "
                                 />
                               </div>
@@ -112,8 +138,9 @@ export default function EditTask() {
                                 </label>
                                 <input
                                   type="date"
+                                  value={UpTicket.StartDate}
                                   name="StartDate"
-                                  id="start-date"
+                                  onChange={HandleUpTicketInput}
                                   className="mt-1 block w-full h-10 shadow-lg focus:outline-none border-l-4 border-yellow-600 sm:text-sm "
                                 />
                               </div>
@@ -122,12 +149,13 @@ export default function EditTask() {
                                   htmlFor="last-date"
                                   className="block text-sm font-medium text-black"
                                 >
-                                  Submission Date
+                                  LastDate
                                 </label>
                                 <input
                                   type="date"
+                                  value={UpTicket.SubDate}
                                   name="SubDate"
-                                  id="last-date"
+                                  onChange={HandleUpTicketInput}
                                   className="mt-1 block w-full h-10 shadow-lg focus:outline-none border-l-4 border-yellow-600 sm:text-sm "
                                 />
                               </div>
@@ -141,9 +169,10 @@ export default function EditTask() {
 
                                 <select
                                   name="Status"
+                                  onChange={HandleUpTicketInput}
                                   className="mt-1 block w-full h-10 shadow-lg focus:outline-none border-l-4 border-yellow-600 sm:text-sm text-black "
                                 >
-                                  <option>Current Status</option>
+                                  <option>{UpTicket.Status}</option>
                                   <option>On going</option>
                                   <option>Completed</option>
                                   <option>Late</option>
@@ -158,9 +187,9 @@ export default function EditTask() {
                                 </label>
                                 <input
                                   type="text"
+                                  value={UpTicket.Role}
                                   name="Role"
-                                  id="role"
-                                  autoComplete="family-name"
+                                  onChange={HandleUpTicketInput}
                                   className="mt-1 block w-full h-10 shadow-lg focus:outline-none border-l-4 border-yellow-600 sm:text-sm "
                                 />
                               </div>
