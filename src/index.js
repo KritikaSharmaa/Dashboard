@@ -6,6 +6,14 @@ import Dashboard from "./views/Dashboard";
 import NewTask from "./views/NewTask";
 import ShowTask from "./views/ShowTask";
 import serviceWorker from "./serviceWorker.js";
+import fireDB from "../src/firebase";
+fireDB.enablePersistence().catch((err) => {
+  if (err.code == "failed-precondition") {
+    console.log("yes");
+  } else if (err.code == "unimplemented") {
+    console.log("No");
+  }
+});
 
 ReactDOM.render(
   <BrowserRouter>

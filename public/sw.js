@@ -1,5 +1,5 @@
-var CACHE_NAME = "my-pwa-cache-v1";
-var CAHCHE_DYNAMIC_NAME = "dynamic-v1";
+var CACHE_NAME = "my-pwa-cache-v4";
+var CAHCHE_DYNAMIC_NAME = "dynamic-v4";
 var urlsToCache = [
   "/",
   "/dashboard",
@@ -35,7 +35,7 @@ this.addEventListener("activate", (evt) => {
       //-->all caches inside array of cache storage
       return Promise.all(
         keys
-          .filter((key) => key !== CACHE_NAME)
+          .filter((key) => key !== CACHE_NAME && key !== CAHCHE_DYNAMIC_NAME)
           .map((key) => caches.delete(key))
       );
     })
@@ -44,19 +44,19 @@ this.addEventListener("activate", (evt) => {
 
 this.addEventListener("fetch", (evnt) => {
   // console.log(evnt);
-  if (!(evnt.request.url.indexOf("http") === 0)) return;
-
-  evnt.respondWith(
-    caches.match(evnt.request).then((cacheRes) => {
-      return (
-        cacheRes ||
-        fetch(evnt.request).then((fetchRes) => {
-          return caches.open(CAHCHE_DYNAMIC_NAME).then((cache) => {
-            cache.put(evnt.request.url, fetchRes.clone());
-            return fetchRes;
-          });
-        })
-      );
-    })
-  );
+  if (evnt.request.url.indexOf("firestore.googleapis.com") === -1) {
+    evnt.respondWith(
+      caches.match(evnt.request).then((cacheRes) => {
+        return (
+          cacheRes ||
+          fetch(evnt.request).then((fetchRes) => {
+            return caches.open(CAHCHE_DYNAMIC_NAME).then((cache) => {
+              cache.put(evnt.request.url, fetchRes.clone());
+              return fetchRes;
+            });
+          })
+        );
+      })
+    );
+  }
 });
