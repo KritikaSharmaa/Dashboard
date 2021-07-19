@@ -1,5 +1,6 @@
 var CACHE_NAME = "my-pwa-cache-v4";
 var CAHCHE_DYNAMIC_NAME = "dynamic-v4";
+
 var urlsToCache = [
   "/",
   "/dashboard",
@@ -17,7 +18,9 @@ var urlsToCache = [
   "/static/js/bundle.js",
   "/static/js/vendors~main.chunk.js",
   "/static/js/main.chunk.js",
+  "/NewTask",
 ];
+
 this.addEventListener("install", function (event) {
   event.waitUntil(
     caches.open(CACHE_NAME).then(function (cache) {

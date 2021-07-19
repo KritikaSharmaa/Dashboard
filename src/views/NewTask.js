@@ -60,7 +60,7 @@ const NewTask = () => {
           <div className="md:col-span-1">
             <div className="px-4 sm:px-0 md:ml-5">
               <h3 className="text-xl font-bold leading-6 text-gray-900">
-                Assign New Ticket
+                Assign New Task
               </h3>
               <p className="mt-1 text-sm text-gray-600">
                 Please fill All the details
