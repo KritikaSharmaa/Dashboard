@@ -5,6 +5,7 @@ import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import Dashboard from "./views/Dashboard";
 import NewTask from "./views/NewTask";
 import ShowTask from "./views/ShowTask";
+import serviceWorker from "./serviceWorker.js";
 
 ReactDOM.render(
   <BrowserRouter>
@@ -17,3 +18,5 @@ ReactDOM.render(
   </BrowserRouter>,
   document.getElementById("root")
 );
+
+serviceWorker();
